@@ -3,7 +3,7 @@ pragma solidity >=0.5.0 <0.7.0;
 contract AdFactory {
     Ad[] public deployedAds;
 
-    function createAd(string name,uint price, string desc,string loc,uint con) public {
+    function createAd(string memory name ,uint price , string memory desc,string memory loc,uint con) public {
         Ad newAd = new Ad(name, msg.sender,price,desc,loc,con);
         deployedAds.push(newAd);
     }
@@ -15,26 +15,30 @@ contract AdFactory {
 
 contract Ad {
     
-    string name;
+    string public name;
     address public manager;
     uint public priceQuoted;
-    string description;
-    string location;
-    uint contact;
+    string public description;
+    string public location;
+    uint public contact;
 
-    constructor(string creaname,address crea,uint price,string desc, string loc,uint con) public {
+    constructor(string  memory creaname ,address crea, uint price, string  memory desc, string memory loc, uint con ) public {
         name = creaname;
-        manager = creator;
-        minimumContribution = minimum;
+        manager = crea;
+        priceQuoted = price;
         description = desc;
         location = loc;
         contact = con;
     }
 
+    function getPriceQuoted() public returns(uint) {
+        return priceQuoted;
+    }
+
     function buyProduct() public payable {
         require(
-            msg.value >= minimumContribution,
-            "A minumum contribution is required."
+            msg.value >= priceQuoted,
+            "priceQuoted violated"
         );
     }
 
