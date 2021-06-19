@@ -6,26 +6,32 @@ import Layout from "../components/Layout";
 
 class AdIndex extends Component {
   static async getInitialProps() {
-    const ads = await factory.methods.getDeployedAds().call();
+    let ads;
+    try {
+      ads = await factory.methods.getDeployedAds().call();
+    } catch (e) {
+      ads = [];
+      console.log(e);
+    }
     return { ads };
   }
 
   renderAds() {
-    const items = this.props.ads.map(ad => {
-      return {
-        header: ad,
-        description: (
-          <Link href="/ads/[ad]" as={`/ads/${ad}`}>
+    let items = this.props.ads.length == 0 ?
+      <h3>No ads</h3>
+      :
+      this.props.ads.map(ad => {
+        return {
+          header: ad,
+          description: (
             <a>View ad</a>
-          </Link>
-        ),
-        fluid: true,
-        style: {
-          marginLeft: "0"
-        }
-      };
-    });
-
+          ),
+          fluid: true,
+          style: {
+            marginLeft: "0"
+          }
+        };
+      });
     return <Card.Group items={items} />;
   }
 
