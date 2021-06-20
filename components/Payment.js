@@ -20,10 +20,17 @@ class Payment extends Component {
 
     try {
       const accounts = await web3.eth.getAccounts();
-      await ad.methods.buyProduct().send({
-        from: accounts[0],
-        value: web3.utils.toWei(ad.methods.getPrice().call(), "ether")
-      });
+      const price = await ad.methods.priceQuoted().call();
+      console.log(price);
+      // const seller = await ad.methods.getseller().call();
+      var bal = await web3.eth.getBalance(this.props.address);
+      console.log("bal:"+bal);
+      await ad.methods.buyProduct().send({from : accounts[0],value: price.toString()});
+      console.log("bal:"+bal);
+
+      //finalise mei dikkat h
+      await ad.methods.finalise().call();
+      console.log("bal:"+bal);
 
       Router.replace(
         "/ads/[ad]",

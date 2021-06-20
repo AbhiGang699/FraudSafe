@@ -28,7 +28,7 @@ input.sources[contractFileName] = {
 };
 
 const output = JSON.parse(solc.compile(JSON.stringify(input)));
-
+console.log(output);
 
 const contracts = output.contracts[contractFileName];
 

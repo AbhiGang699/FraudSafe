@@ -9,6 +9,7 @@ class AdIndex extends Component {
     let ads;
     try {
       ads = await factory.methods.getDeployedAds().call();
+      console.log(ads);
     } catch (e) {
       ads = [];
       console.log(e);
@@ -24,7 +25,9 @@ class AdIndex extends Component {
         return {
           header: ad,
           description: (
+            <Link href="/ads/[ad]" as={`/ads/${ad}`}>
             <a>View ad</a>
+            </Link>
           ),
           fluid: true,
           style: {

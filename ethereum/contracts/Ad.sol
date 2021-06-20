@@ -4,7 +4,9 @@ contract AdFactory {
     Ad[] public deployedAds;
 
     function createAd(string memory name ,uint price , string memory desc,string memory loc,uint con) public {
-        Ad newAd = new Ad(name, msg.sender,price,desc,loc,con);
+
+        address payable manager = address(uint160(msg.sender));
+        Ad newAd = new Ad(name,manager,price,desc,loc,con);
         deployedAds.push(newAd);
     }
 
@@ -16,39 +18,27 @@ contract AdFactory {
 contract Ad {
     
     string public name;
-    address public manager;
+    address payable public seller;
     uint public priceQuoted;
     string public description;
     string public location;
     uint public contact;
 
-    constructor(string  memory creaname ,address crea, uint price, string  memory desc, string memory loc, uint con ) public {
+    constructor(string  memory creaname ,address payable crea, uint price, string  memory desc, string memory loc, uint con ) public {
         name = creaname;
-        manager = crea;
+        seller = crea;
         priceQuoted = price;
         description = desc;
         location = loc;
         contact = con;
     }
 
-    function getPriceQuoted() public returns(uint) {
-        return priceQuoted;
-    }
-
-    function buyProduct() public payable {
-        require(
-            msg.value >= priceQuoted,
-            "priceQuoted violated"
-        );
-    }
-
     
-
-    modifier onlyManager() {
-        require(
-            msg.sender == manager,
-            "Only the Ad manager can call this function."
-        );
-        _;
+    function buyProduct() public payable {
     }
+
+    function finalise() public {
+        seller.transfer(address(this).balance);
+    }
+    
 }
