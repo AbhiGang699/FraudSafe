@@ -26,6 +26,11 @@ class Payment extends Component {
       var bal = await web3.eth.getBalance(this.props.address);
       console.log(ad.address);
       console.log("bal:"+bal);
+      const status = await ad.methods.isComplete().call();
+      if(status==true){
+        this.setState({ errorMessage: "Ad is closed" })
+        return;
+      }
       await ad.methods.buyProduct().send({ from: accounts[0], value: price.toString() });
       bal = await web3.eth.getBalance(this.props.address);
       console.log("bal:"+bal);

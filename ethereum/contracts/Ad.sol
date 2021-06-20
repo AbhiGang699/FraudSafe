@@ -11,8 +11,13 @@ contract AdFactory {
     }
 
     function getDeployedAds() public view returns(Ad[] memory) {
+       
         return deployedAds;
+
+        
     }
+
+    
 }
 
 contract Ad {
@@ -23,6 +28,7 @@ contract Ad {
     string public description;
     string public location;
     uint public contact;
+    bool public isComplete;
 
     constructor(string  memory creaname ,address payable crea, uint price, string  memory desc, string memory loc, uint con ) public {
         name = creaname;
@@ -31,6 +37,7 @@ contract Ad {
         description = desc;
         location = loc;
         contact = con;
+        isComplete = false;
     }
 
     function getSeller() public view returns(address payable) {
@@ -43,6 +50,7 @@ contract Ad {
 
     function finalise() public {
         seller.transfer(address(this).balance);
+        isComplete = true;
     }
     
 }
