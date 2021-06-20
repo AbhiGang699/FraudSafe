@@ -74,7 +74,7 @@ class AdShow extends Component {
           "Name of the product"
       },
       {
-        header: web3.utils.fromWei(priceQuoted, "ether"),
+        header: web3.utils.fromWei(priceQuoted, "ether") + " Ether",
         meta: "Price",
         description:
           "Price quoted by seller"

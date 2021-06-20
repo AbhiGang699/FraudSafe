@@ -21,30 +21,22 @@ class Payment extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       const price = await ad.methods.priceQuoted().call();
-      console.log(price);
-      // const seller = await ad.methods.getseller().call();
+
       var bal = await web3.eth.getBalance(this.props.address);
-      console.log(ad.address);
-      console.log("bal:"+bal);
       const status = await ad.methods.isComplete().call();
       if(status==true){
-        this.setState({ errorMessage: "Ad is closed" })
-        return;
+        throw "Ad is closed";
       }
       await ad.methods.buyProduct().send({ from: accounts[0], value: price.toString() });
       bal = await web3.eth.getBalance(this.props.address);
-      console.log("bal:"+bal);
-
-      //finalise mei dikkat h
-      //await ad.methods.finalise().call();
-      console.log("bal:"+bal);
 
       Router.replace(
         "/ads/[ad]",
         `/ads/${this.props.address}`
       );
     } catch (err) {
-      this.setState({ errorMessage: err.message });
+      console.log(err);
+      this.setState({ errorMessage: err });
     }
 
     this.setState({ loading: false, value: "" });

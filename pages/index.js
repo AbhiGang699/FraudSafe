@@ -6,42 +6,50 @@ import Layout from "../components/Layout";
 import Ad from "../ethereum/ad";
 
 class AdIndex extends Component {
+
   static async getInitialProps() {
     let ads;
+    let list = [];
+
     try {
+      console.log("getting initial props");
       ads = await factory.methods.getDeployedAds().call();
-      console.log("no error::::::"+ads);
+      for (var i = 0; i < ads.length; i++){
+        var isClosed = await Ad(ads[i]).methods.isComplete().call();
+        console.log("haha" + isClosed);
+        if(isClosed)
+          continue;
+        
+        let header = await Ad(ads[i]).methods.name().call();
+        let temp = [ads[i], header];
+        list.push(temp);
+      }
     } catch (e) {
-      console.log("error:::::::");
       ads = [];
       console.log(e);
     }
-    return { ads };
+    return { ads , list };
   }
 
   renderAds() {
     console.log(this.props.ads.length);
     let items;
-    if(this.props.ads.length==0){
+    if (this.props.ads.length == 0) {
+      console.log("empty list really");
       return <h3>No ads</h3>;
     }
     else{
-      let list = [];
-      for(var i=0;i<this.props.ads.length;i++){
-        if(Ad(this.props.ads[i]).methods.isComplete().call()==true)
-        continue;
-
-        list.push(this.props.ads[i])
-      }
-      if(list.length==0)
+    
+      if(this.props.list.length==0)
       {
         return <h3>No ads</h3>;
       }
-      items = list.map(ad => {
+      items = this.props.list.map(ad => {
+        console.log(ad);
         return {
-          header: ad,
+          header: ad[1],
           description: (
-            <Link href="/ads/[ad]" as={`/ads/${ad}`}>
+            <Link href="/ads/[ad]" as={`/ads/${ad[0]}`}>
             <a>View ad</a>
             </Link>
           ),
@@ -78,21 +86,3 @@ class AdIndex extends Component {
 }
 
 export default AdIndex;
-
-// let items = this.props.ads.length == 0 ?
-//       <h3>No ads</h3>
-//       :
-      // this.props.ads.map(ad => {
-      //   return {
-      //     header: ad,
-      //     description: (
-      //       <Link href="/ads/[ad]" as={`/ads/${ad}`}>
-      //       <a>View ad</a>
-      //       </Link>
-      //     ),
-      //     fluid: true,
-      //     style: {
-      //       marginLeft: "0"
-      //     }
-      //   };
-      // });

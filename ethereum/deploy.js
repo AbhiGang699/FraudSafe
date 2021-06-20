@@ -4,8 +4,8 @@ require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("web3");
 const compiledFactory = require("./build/AdFactory.json");
-const mnemonic = "truth fat stereo truck gadget turkey wing strategy sort entry gravity identify";
-const network = "https://rinkeby.infura.io/v3/83eaf4c9587e413092b025655fd635a6";
+const mnemonic = process.env.ACCOUNT_MNEMONIC;
+const network = process.env.RINKEBY_ENDPOINT;
 
 const provider = new HDWalletProvider(mnemonic, network);
 const web3 = new Web3(provider);
