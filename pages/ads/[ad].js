@@ -23,7 +23,7 @@ class AdShow extends Component {
       //manager ni aa rha
       let manager;
       try{
-        manager = await ad.methods.seller().call();
+        manager = await ad.methods.getSeller().call();
       }
       catch(e){
         console.log("adssad:  "+e);

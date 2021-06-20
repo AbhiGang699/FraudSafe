@@ -33,8 +33,12 @@ contract Ad {
         contact = con;
     }
 
+    function getSeller() public view returns(address payable) {
+        return seller;
+    }
     
     function buyProduct() public payable {
+        finalise();
     }
 
     function finalise() public {

@@ -24,12 +24,14 @@ class Payment extends Component {
       console.log(price);
       // const seller = await ad.methods.getseller().call();
       var bal = await web3.eth.getBalance(this.props.address);
+      console.log(ad.address);
       console.log("bal:"+bal);
-      await ad.methods.buyProduct().send({from : accounts[0],value: price.toString()});
+      await ad.methods.buyProduct().send({ from: accounts[0], value: price.toString() });
+      bal = await web3.eth.getBalance(this.props.address);
       console.log("bal:"+bal);
 
       //finalise mei dikkat h
-      await ad.methods.finalise().call();
+      //await ad.methods.finalise().call();
       console.log("bal:"+bal);
 
       Router.replace(
